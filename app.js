@@ -56,7 +56,7 @@ async function TransferCBInitial(err, res){
         console.log("There was an error with the RPC endpoint")
     } else {
         var latest_block = (res[res.length - 1]).blockNumber // get the latest event block number
-        if(latest_block > lastEventBlock) {
+        if(latest_block > lastEventBlock) { // check if the recived block is actually higher that the previous one
             lastEventBlock = latest_block // so that next time we only get events starting from that block
             for(var i = 0; i < res.length; i++){
                 var address = res[i].returnValues.to
