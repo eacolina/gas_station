@@ -1,7 +1,4 @@
-
-
-
-if(process.env.NODE_ENV != 'production'){
+if (process.env.NODE_ENV != 'production') {
     require('dotenv').load()
 }
 
@@ -9,10 +6,10 @@ var HDWalletProvider = require("truffle-hdwallet-provider")
 var Web3 = require('Web3')
 var web3
 var eth
-var utils 
+var utils
 var account
 
-function providerSetup(){
+function providerSetup() {
     return new HDWalletProvider(process.env.WALLET_MNEMONIC, process.env.RPC_ENDPOINT)
 }
 
@@ -24,5 +21,5 @@ async function init() {
 
 
 module.exports = {
-    init:init,
+    init: init,
 }
