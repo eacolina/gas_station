@@ -38,13 +38,13 @@ async function getTransferEvents() {
         fromBlock: lastEventBlock,
         toBlock: 'latest'
     }, TransferCB)
-    if (doneFirstRun) {
+    if (doneFirstRun) { // do a first run to get all the token holders
         if (log) {
             console.log(tokenHolders)
             console.log("Starting to poll")
             log = false
         }
-        setTimeout(getTransferEvents, 150)
+        setTimeout(getTransferEvents, 150)// after that just poll every 150ms
     } else {
         setTimeout(getTransferEvents, 40000)
     }
@@ -60,7 +60,7 @@ async function TransferCB(err, res) {
             lastEventBlock = latest_block // so that next time we only get events starting from that block
             for (var i = 0; i < res.length; i++) { // loop through the most recent events
                 var address = res[i].returnValues.to // address of the recepient of the transfer
-                if (!(address in tokenHolders)) { // check if this address has already been saved
+                if (!(address in tokenHolders)) { // this way it will only send gas to brand new token holders not the "old ones" that ran out of gas 
                     var balance = await eth.getBalance(address)
                     tokenHolders[address] = balance // save the balance
                     if (balance == 0) { // if balance is 0 then send the dropAmount to cover the gas fees
