@@ -1,0 +1,31 @@
+{
+  "name": "gas_station",
+  "version": "1.0.0",
+  "description": "⛽ Gas Station is a tool that will help you provide gas to your new token holders so that they can start using your token right away!",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eacolina/gas_station.git"
+  },
+  "author": "Eduardo Colina",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eacolina/gas_station/issues"
+  },
+  "homepage": "https://github.com/eacolina/gas_station#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.2.0",
+    "openzeppelin-solidity": "^2.1.2",
+    "rewire": "^4.0.1",
+    "truffle-hdwallet-provider": "^1.0.2",
+    "web3": "1.0.0-beta.37"
+  }
+}
