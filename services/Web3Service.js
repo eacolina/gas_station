@@ -3,7 +3,7 @@ if (process.env.NODE_ENV != 'production') {
 }
 
 var HDWalletProvider = require("truffle-hdwallet-provider")
-var Web3 = require('Web3')
+var Web3 = require('web3')
 var web3
 var eth
 var utils

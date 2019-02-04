@@ -34,6 +34,7 @@ async function startPolling(web3Service) {
 }
 
 async function getTransferEvents() {
+    //console.log("Loading most recent Transfer events from block "+lastEventBlock+"...")
     tokenContract.getPastEvents("Transfer", {
         fromBlock: lastEventBlock,
         toBlock: 'latest'
@@ -44,9 +45,9 @@ async function getTransferEvents() {
             console.log("Starting to poll")
             log = false
         }
-        setTimeout(getTransferEvents, 150)// after that just poll every 150ms
+        setTimeout(getTransferEvents, 5000)// after that just poll every 150ms
     } else {
-        setTimeout(getTransferEvents, 40000)
+        setTimeout(getTransferEvents, 5000)
     }
 }
 
@@ -60,12 +61,12 @@ async function TransferCB(err, res) {
             lastEventBlock = latest_block // so that next time we only get events starting from that block
             for (var i = 0; i < res.length; i++) { // loop through the most recent events
                 var address = res[i].returnValues.to // address of the recepient of the transfer
-                if (!(address in tokenHolders)) { // this way it will only send gas to brand new token holders not the "old ones" that ran out of gas 
+                if (!(address in tokenHolders)) { // this way it will only send gas to brand new token holders not the "old ones" that ran out of gas
                     var balance = await eth.getBalance(address)
                     tokenHolders[address] = balance // save the balance
                     if (balance == 0) { // if balance is 0 then send the dropAmount to cover the gas fees
                         supplyGas(address)
-                        tokenHolders[address] = utils.toWei('0.02')
+                        tokenHolders[address] = utils.toWei('0.01')
                     }
                 }
             }
@@ -76,20 +77,25 @@ async function TransferCB(err, res) {
 //supplyGas(dest_account): Sends the dropAmount of Ether/xDai to dest account
 async function supplyGas(dest_account) {
     console.log(account)
-    var nonce = await eth.getTransactionCount(account) // get nonce to send the tx
-    eth.sendTransaction({
-        from: account,
-        to: dest_account,
-        value: dropAmount,
-        gas: 210000,
-        gasPrice: 20000000000,
-        nonce: nonce
-    }, (err, res) => {
-        if (err != undefined) {
-            console.log(err)
-        } else {
-            console.log("Just sent", utils.fromWei(dropAmount), "xDAI to account", dest_account)
-            console.log('TxHash:', res)
-        }
-    })
+    if(dest_account!="0x7301CFA0e1756B71869E93d4e4Dca5c7d0eb0AA6"){
+        var nonce = await eth.getTransactionCount(account) // get nonce to send the tx
+        eth.sendTransaction({
+            from: account,
+            to: dest_account,
+            value: dropAmount,
+            gas: 210000,
+            gasPrice: 10101010101,
+            nonce: nonce
+        }, (err, res) => {
+            if (err != undefined) {
+                console.log(err)
+            } else {
+                console.log("Just sent", utils.fromWei(dropAmount), "xDAI to account", dest_account)
+                console.log('TxHash:', res)
+            }
+        })
+    }else{
+        console.log("Ignoring the bridge...  (some knucklehead sent the bridge tokens...)")
+    }
+
 }
